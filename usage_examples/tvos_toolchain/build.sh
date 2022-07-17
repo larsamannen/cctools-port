@@ -87,8 +87,12 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
-TRIPLE="arm-apple-darwin11"
-TARGETDIR="$PWD/target"
+if [ -z "$TRIPLE" ]; then
+    TRIPLE="arm-apple-darwin11"
+fi
+if [ -z "$TARGETDIR" ]; then
+    TARGETDIR="$PWD/target"
+fi
 SDKDIR="$TARGETDIR/SDK"
 
 if [ -d $TARGETDIR ]; then
@@ -151,10 +155,14 @@ elif ! which dsymutil &>/dev/null; then
     echo "int main(){return 0;}" | cc -xc -O2 -o $TARGETDIR/bin/dsymutil -
 fi
 
+if [ -z "${TVOS_DEPLOYMENT_TARGET}" ]; then
+	TVOS_DEPLOYMENT_TARGET=$SDK_VERSION
+fi
+
 verbose_cmd cc -O2 -Wall -Wextra -pedantic wrapper.c \
     -DSDK_DIR=\"\\\"$WRAPPER_SDKDIR\\\"\" \
     -DTARGET_CPU=\"\\\"$2\\\"\" \
-    -DOS_VER_MIN=\"\\\"$SDK_VERSION\\\"\" \
+    -DOS_VER_MIN=\"\\\"$TVOS_DEPLOYMENT_VERSION\\\"\" \
     -o $TARGETDIR/bin/$TRIPLE-clang
 
 pushd $TARGETDIR/bin &>/dev/null
@@ -169,7 +177,7 @@ rm -rf tmp
 
 mkdir -p tmp
 pushd tmp &>/dev/null
-git_clone_repository https://github.com/tpoechtrager/ldid.git master
+git_clone_repository https://github.com/tpoechtrager/ldid.git $LDID_VERSION
 pushd ldid &>/dev/null
 make INSTALLPREFIX=$TARGETDIR -j$JOBS install
 popd &>/dev/null
@@ -210,6 +218,10 @@ echo ""
 export PATH=$TARGETDIR/bin:$PATH
 
 echo "int main(){return 0;}" | $TRIPLE-clang -xc -O2 -o test - 1>/dev/null || exit 1
+rm test
+echo "OK"
+
+echo "int main(){return 0;}" | $TRIPLE-clang++ -xc++ -std=c++11 -O2 -o test - 1>/dev/null || exit 1
 rm test
 echo "OK"
 

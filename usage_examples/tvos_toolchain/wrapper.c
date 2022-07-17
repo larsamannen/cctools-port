@@ -33,6 +33,15 @@
 #include <sys/stat.h>
 #endif
 
+int endswith(const char *str, const char *end) {
+    int slen = strlen(str);
+    int elen = strlen(end);
+    if (slen < elen) {
+        return 0;
+    }
+    return strcmp(str + slen - elen, end) == 0;
+}
+
 char *get_executable_path(char *epath, size_t buflen)
 {
     char *p;
@@ -182,7 +191,12 @@ int main(int argc, char *argv[])
     args[i++] = osvermin;
     args[i++] = "-mlinker-version=609";
     args[i++] = "-Wl,-adhoc_codesign";
-    args[i++] = "-Wno-unused-command-line-argument";
+    args[i++] = "-Qunused-arguments";
+
+    if  (endswith(compiler, "++"))
+    {
+        args[i++] = "-stdlib=libc++";
+    }
 
     for (j = 1; j < argc; ++i, ++j)
         args[i] = argv[j];
