@@ -82,8 +82,8 @@ function git_clone_repository
 
 
 if [ $# -lt 2 ]; then
-    echo "usage: $0 tvOS.sdk.tar* <target cpu>" 1>&2
-    echo "i.e. $0 /path/to/tvOS.sdk.tar.xz armv7" 1>&2
+    echo "usage: $0 AppleTVOS.sdk.tar* <target cpu>" 1>&2
+    echo "i.e. $0 /path/to/AppleTVOS.sdk.tar.xz arm64" 1>&2
     exit 1
 fi
 
@@ -114,7 +114,7 @@ if [ -z "$SDK_VERSION" ]; then
   SDK_VERSION=$(echo $1 | grep -P -o "[0-9].[0-9]+" | head -1)
 fi
 if [ -z "$SDK_VERSION" ]; then
-    echo "tvOS Version must be in the SDK filename!" 1>&2
+    echo "AppleTVOS Version must be in the SDK filename!" 1>&2
     exit 1
 fi
 extract $1
@@ -123,7 +123,7 @@ if [ -z "$SYSLIB" ]; then
     echo "SDK should contain libSystem{.dylib,.tbd}" 1>&2
     exit 1
 fi
-WRAPPER_SDKDIR=$(echo tvOS*sdk | head -n1)
+WRAPPER_SDKDIR=$(echo AppleTVOS*sdk | head -n1)
 if [ -z "$WRAPPER_SDKDIR" ]; then
     echo "broken SDK" 1>&2
     exit 1

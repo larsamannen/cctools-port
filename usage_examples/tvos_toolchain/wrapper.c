@@ -1,9 +1,9 @@
 #ifndef TARGET_CPU
-#define TARGET_CPU "armv7"
+#define TARGET_CPU "arm64"
 #endif
 
 #ifndef OS_VER_MIN
-#define OS_VER_MIN "4.2"
+#define OS_VER_MIN "14.0"
 #endif
 
 #ifndef SDK_DIR
