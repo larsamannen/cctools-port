@@ -1,5 +1,5 @@
 #ifndef TARGET_CPU
-#define TARGET_CPU "x86_64"
+#define TARGET_CPU "armv7"
 #endif
 
 #ifndef OS_VER_MIN
