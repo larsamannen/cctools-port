@@ -83,12 +83,12 @@ function git_clone_repository
 
 if [ $# -lt 2 ]; then
     echo "usage: $0 AppleTVSimulator.sdk.tar* <target cpu>" 1>&2
-    echo "i.e. $0 /path/to/AppleTVSimulator.sdk.tar.xz arm64" 1>&2
+    echo "i.e. $0 /path/to/AppleTVSimulator.sdk.tar.xz x86_64" 1>&2
     exit 1
 fi
 
 if [ -z "$TRIPLE" ]; then
-    TRIPLE="arm-apple-darwin11"
+    TRIPLE="x86_64-apple-darwin11"
 fi
 if [ -z "$TARGETDIR" ]; then
     TARGETDIR="$PWD/target"
